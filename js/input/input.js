@@ -133,7 +133,8 @@ export class Input {
 
   // ------------------------------------------------------------------ gamepad
   pollPad() {
-    const pads = navigator.getGamepads ? navigator.getGamepads() : [];
+    let pads = [];
+    try { pads = navigator.getGamepads ? navigator.getGamepads() || [] : []; } catch (_) { /* blocked by a frame's permissions policy */ }
     let gp = null;
     for (const p of pads) if (p && p.connected && (!gp || p.mapping === 'standard')) gp = p;
     if (!gp) { this.pad = null; this.padPrev = {}; return {}; }

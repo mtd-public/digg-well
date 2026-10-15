@@ -8,8 +8,8 @@ own employees, half-drowned in crude and begging the boss for help. He hits them
 drawn as a dark cartoon. The final boss is **Chairman Devil, Chief Hell Operator**: half pinstripe
 robber baron, half devil, in the Bedrock Boardroom.
 
-**Play:** https://mtd-public.github.io/digg-well/ · art bible: [preview.html](https://mtd-public.github.io/digg-well/preview.html) ·
-design: [GAME_DESIGN.md](GAME_DESIGN.md)
+**Play:** https://mtd-public.github.io/digg-well/ (or the [single-file build on claude.ai](https://claude.ai/artifact/1G5hsSEQiVfTp3JSzZxqDu)) ·
+art bible: [preview.html](https://mtd-public.github.io/digg-well/preview.html) · design: [GAME_DESIGN.md](GAME_DESIGN.md)
 
 ## How it plays
 
