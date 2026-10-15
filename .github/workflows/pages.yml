@@ -1,0 +1,71 @@
+name: Check and deploy
+
+# House rule (mstr-gme-dsgn-tmpt): check on every branch, deploy to GitHub Pages only from main
+# (the github-pages environment admits main only, so branch deploys would turn PRs red: docs/14 #60).
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Sim checks (every seed finishable, every rule)
+        run: node tools/sim-check.mjs 40
+      - name: Autopilot proof (the pilot drives the real physics to the Boardroom)
+        run: node tools/autopilot.mjs 6
+
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - name: Playwright + Chromium
+        run: npm install --no-save playwright@1.48.2 && npx playwright install --with-deps chromium
+      - name: Smoke test (desktop, phone, landscape, tablet)
+        run: |
+          python3 -m http.server 4210 &
+          sleep 1
+          CI=1 BASE=http://localhost:4210/ SHOTS=shots node tools/smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: smoke-shots, path: shots, retention-days: 7 }
+
+  deploy:
+    needs: [check, smoke]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # Ship only what the game loads (and the art bible); skip tools and docs.
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r index.html preview.html css js touch-zoom-guard _site/
+          touch _site/.nojekyll
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

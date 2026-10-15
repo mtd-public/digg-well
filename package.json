@@ -1,0 +1,11 @@
+{
+  "name": "digg-well",
+  "private": true,
+  "type": "module",
+  "description": "Downwell meets Spelunky in isometric 3D: an oil tycoon digs down a bottomless well for the Golden Shovel. No build step.",
+  "scripts": {
+    "serve": "python3 -m http.server 4210",
+    "check": "node tools/sim-check.mjs",
+    "smoke": "BASE=http://localhost:4210/ node tools/smoke.mjs"
+  }
+}

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#07050b">
+  <title>Digg Well</title>
+  <meta name="description" content="Digg Well: an oil tycoon digs down a bottomless well, story by story, for the Golden Shovel. Downwell meets Spelunky in isometric 3D.">
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rye&family=Special+Elite&display=swap">
+  <!-- Guard CSS first so the game CSS can override it (kits/touch-zoom-guard). -->
+  <link rel="stylesheet" href="touch-zoom-guard/touch-zoom-guard.css">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">{ "imports": { "three": "./js/vendor/three.module.min.js" } }</script>
+</head>
+<body>
+  <canvas id="view"></canvas>
+  <div id="zone" data-touch-control></div>
+  <div id="stick-base" class="stick-base"></div>
+  <div id="stick-knob" class="stick-knob"></div>
+  <div id="bubbles"></div>
+
+  <div id="hud" class="hidden">
+    <div class="hud-top">
+      <div class="hud-left">
+        <div id="h-hearts" class="hearts"></div>
+        <div class="money"><span class="cur">$</span><b id="h-money">0</b><span id="h-power" class="power">×1.0 POWER</span></div>
+        <div id="h-pigs" class="pigs"></div>
+        <div id="h-upg" class="upg"></div>
+      </div>
+      <div class="hud-mid">
+        <div id="h-depth" class="depth">DEPTH 1</div>
+        <div id="h-name" class="dname">The Wellhead</div>
+        <div id="h-stories" class="stories"></div>
+        <div id="h-metres" class="metres">0 ft</div>
+      </div>
+      <div class="hud-right"><button id="b-pause" class="mini" aria-label="Pause" data-touch-allow>II</button></div>
+    </div>
+    <div id="h-boss" class="boss hidden"><div class="bname">CHAIRMAN DEVIL <small>Chief Hell Operator</small></div><div class="bbar"><i id="h-bossfill"></i></div></div>
+    <div id="h-banner" class="banner"></div>
+    <div id="h-combo" class="combo"></div>
+    <div id="h-prompt" class="prompt"></div>
+    <div class="kit">
+      <button id="b-weapon" class="badge weapon" aria-label="Weapon (tap to switch)"><span id="h-wicon">⛏</span><small id="h-wammo">Shovel ∞</small></button>
+      <button id="b-item" class="badge item" aria-label="Item (tap to switch)"><span id="h-iicon">—</span><small id="h-icount">no item</small></button>
+    </div>
+    <div id="touch" class="touch">
+      <button id="b-use" class="tbtn use" aria-label="Use item">USE</button>
+      <button id="b-attack" class="tbtn attack" aria-label="Attack">⛏</button>
+      <button id="b-jump" class="jump-btn" aria-label="Jump">JUMP</button>
+    </div>
+    <div class="vignette"></div>
+  </div>
+
+  <div id="screen" class="screen" data-touch-allow></div>
+  <div class="tzg-hint">Pinch out to reset zoom</div>
+
+  <script src="touch-zoom-guard/touch-zoom-guard.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
