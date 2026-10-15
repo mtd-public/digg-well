@@ -49,7 +49,10 @@ await run('desktop', { viewport: { width: 1280, height: 720 } }, async (page) =>
   await page.click('#b-start');
   await page.waitForFunction(() => GAME.state === 'play');
   const x0 = await page.evaluate(() => GAME.world.player.x);
-  await page.keyboard.down('d'); await page.waitForTimeout(700); await page.keyboard.up('d');
+  // hold D until the Tycoon has moved (a slow software-GL runner advances the sim slowly, so no fixed time)
+  await page.keyboard.down('d');
+  await page.waitForFunction((x) => Math.abs(GAME.world.player.x - x) > 0.5, x0, { timeout: 15000 }).catch(() => {});
+  await page.keyboard.up('d');
   await page.keyboard.press('Space'); await page.waitForTimeout(300);
   await page.keyboard.press('j'); await page.waitForTimeout(400);
   await page.mouse.click(640, 400); await page.waitForTimeout(300);
@@ -77,7 +80,7 @@ const touchPlay = async (page, name) => {
   const sx = vp.width * 0.22, sy = vp.height * 0.62;
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: sx, y: sy, id: 1 }] });
   for (let i = 1; i <= 6; i++) { await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: sx, y: sy - i * 12, id: 1 }] }); await page.waitForTimeout(30); }
-  await page.waitForTimeout(600);
+  await page.waitForFunction((v) => Math.abs(GAME.world.player.z + GAME.world.player.x - v) > 0.5, x0, { timeout: 15000 }).catch(() => {});
   const r = await page.locator('#b-jump').boundingBox();
   await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: sx, y: sy - 72, id: 1 }, { x: r.x + r.width / 2, y: r.y + r.height / 2, id: 2 }] });
   await page.waitForTimeout(120);
